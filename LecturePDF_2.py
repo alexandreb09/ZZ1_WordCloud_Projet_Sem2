@@ -45,6 +45,11 @@ def convertPDF2Txt(nomFichier):
     text = textract.process(nomFichier, encoding='utf-8',method='pdfminer')
     return bytes.decode(text)
 
+def remake(liste):
+    newList = []
+    for mot in set(liste):
+        newList.append([mot,liste.count(mot)])
+    return newList
 
 langue='fr'
 os.chdir('./Documents')
@@ -62,5 +67,6 @@ for fichier in listeFichier:
         chaine = LongueurChaine(text[deb+l1+2:])
         chaine = chaine.replace('\n',' ')                                       # suppresion des \n
         chaine = chaine.replace(', ',',')
-        ListeMotCle = chaine.split(',')
-        AffichageMotCle(ListeMotCle)
+        ListeMotCle = ListeMotCle + chaine.split(',')
+ListeMotCle = remake(ListeMotCle)
+AffichageMotCle(ListeMotCle)
