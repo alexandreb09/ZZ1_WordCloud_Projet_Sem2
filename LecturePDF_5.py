@@ -15,6 +15,25 @@ from PyPDF2 import PdfFileReader,PdfFileMerger
 from tkinter import Tk, StringVar, Label, Radiobutton, Canvas, Button,Frame,Entry,Scrollbar,Listbox
 from tkinter.filedialog import askopenfilename,askdirectory
 from functools import partial
+from wordcloud import WordCloud, STOPWORDS
+import matplotlib.pyplot as plt
+
+
+global listeFichier,langue,methode,numPageDeb,numPageFin
+global label_deb,entry_deb,label_fin,entry_fin,label_PpP,radiobutton_PpP
+global frame,fenetre,fond0
+
+vert0   = '#daf7a6'
+vert1   = '#81c784'
+orange  = '#ffb74d'
+jaune   = '#f9e79f'
+bleu    = '#aed6f1'
+rouge   = '#f5b7b1'
+marron  = '#efebe9'
+marron2 = '#bcaaa4'
+
+listeFichier = []
+
 
 def LongueurChaine(chaine):
     """ Fonction qui renvoie la chaine de texte jusqu'à l'indice de fin des mots clés """
@@ -130,6 +149,7 @@ def methodePageParPage (l1):
 
 def main():
     """ Fonction principale, trouve les mots clés et genere le nuage de mot affiche avec matplotlib """
+    global listeFichier
     if len(listeFichier)>0:
         l1 = 9
         if langue.get() == 'anglais': l1 = 7
@@ -150,35 +170,17 @@ def main():
         	text = text + " " + mot
         # génération du nuage de mots
         wordcloud = WordCloud().generate(text)
-        """plt.imshow(wordcloud, interpolation='bilinear')
-        plt.axis("off")"""
         # lower max_font_size
         wordcloud = WordCloud(max_font_size=40).generate(text)
         plt.figure()
         plt.imshow(wordcloud, interpolation="bilinear")
         plt.axis("off")
         plt.show()
-        #listeFichier = []
         MAJAffFic()
 
 ############################################################################
 #                       AFFICHAGE                                          #
 ############################################################################
-
-global listeFichier,langue,methode,numPageDeb,numPageFin
-global label_deb,entry_deb,label_fin,entry_fin,label_PpP,radiobutton_PpP,fenetre,fond0
-global frame
-
-vert0   = '#daf7a6'
-vert1   = '#81c784'
-orange  = '#ffb74d'
-jaune   = '#f9e79f'
-bleu    = '#aed6f1'
-rouge   = '#f5b7b1'
-marron  = '#efebe9'
-marron2 = '#bcaaa4'
-
-listeFichier = []
 
 SuppTemp()
 fenetre = Tk()
@@ -202,7 +204,7 @@ def update_methode(label, var):
     MAJaffichage()
 
 def MAJaffichage():
-    if methode == 'Intervalle':
+    if methode.get() == 'Intervalle':
         label_deb.grid(row=9, column=2)
         entry_deb.grid(row=9, column=3,sticky="w",padx = 10)
         label_fin.grid(row=10,column=2)
