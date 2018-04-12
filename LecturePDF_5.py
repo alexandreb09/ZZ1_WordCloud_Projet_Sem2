@@ -34,7 +34,7 @@ def RecherDebMotCle(text):
     """ Fonction qui recherche dans un texte l'apparition de mots clés """
     text = text.lower()
     stop = ["mots-clés","mots-cles","mots clés","mots cles"]
-    if langue.get() == 'anglais':
+    if langue.get() == 'Anglais':
         stop = ["keywords","keyword",'key words',"key word"]
     deb = -1
     numMot = 0
