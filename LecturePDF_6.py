@@ -196,10 +196,15 @@ def main():
         text = ""
         for mot in ListeMotCle:
         	text = text + " " + mot
+
+	cloud_mask = np.array(Image.open(path.join(d,"fond.png")))
+	wordcloud = WordCloud(background_color="white", max_words=2000, mask=cloud_mask,
+	stopwords=text, contour_width=3, contour_color='steelblue')
+"""
         # génération du nuage de mots
         wordcloud = WordCloud().generate(text)
         # lower max_font_size
-        wordcloud = WordCloud(max_font_size=40).generate(text)
+        wordcloud = WordCloud(max_font_size=40).generate(text)"""
         plt.figure()
         plt.imshow(wordcloud, interpolation="bilinear")
         plt.axis("off")
