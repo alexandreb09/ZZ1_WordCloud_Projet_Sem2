@@ -19,7 +19,7 @@ from wordcloud import WordCloud, STOPWORDS
 from xlwt import Workbook
 import matplotlib.pyplot as plt
 
-
+#Ceci est une update
 global listeFichier,langue,methode,numPageDeb,numPageFin,nomFichier,export
 global label_deb,entry_deb,label_fin,entry_fin,label_PpP,radiobutton_PpP
 global frame,fenetre,fond0
