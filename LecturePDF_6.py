@@ -9,14 +9,16 @@
 #										                                       #
 ################################################################################
 
+import numpy as np
 from textract import process
-from os import listdir, chdir,remove
+from os import listdir, chdir,remove,path
 from PyPDF2 import PdfFileReader,PdfFileMerger
 from tkinter import Tk, StringVar,IntVar, Label, Radiobutton, Canvas, Button,Frame,Entry,Scrollbar,Listbox,Checkbutton
 from tkinter.filedialog import askopenfilename,askdirectory
 from functools import partial
-from wordcloud import WordCloud, STOPWORDS
+from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 from xlwt import Workbook
+from PIL import Image
 import matplotlib.pyplot as plt
 
 #Ceci est une update
@@ -36,6 +38,7 @@ Coul_Supp = '#eb984e'
 Coul_fond_option2 = '#eb984e'
 
 listeFichier = []
+d = path.dirname(__file__)
 
 
 
@@ -196,19 +199,44 @@ def main():
         text = ""
         for mot in ListeMotCle:
         	text = text + " " + mot
+        stopwords = set(STOPWORDS)
+        stopwords.add("said")
+        alice_coloring = np.array(Image.open(path.join(d, "fond.png")))
+        wc = WordCloud(background_color="white", max_words=2000, mask=alice_coloring,
+               stopwords=stopwords, max_font_size=400, random_state=42)
+        # generate word cloud
+        wc.generate(text)
 
-	cloud_mask = np.array(Image.open(path.join(d,"fond.png")))
-	wordcloud = WordCloud(background_color="white", max_words=2000, mask=cloud_mask,
-	stopwords=text, contour_width=3, contour_color='steelblue')
-"""
+        # create coloring from image
+        image_colors = ImageColorGenerator(alice_coloring)
+
+        # show
+        plt.imshow(wc, interpolation="bilinear")
+        plt.axis("off")
+        plt.figure()
+        # recolor wordcloud and show
+        # we could also give color_func=image_colors directly in the constructor
+        plt.imshow(wc.recolor(color_func=image_colors), interpolation="bilinear")
+        plt.axis("off")
+        #plt.figure()
+        plt.show()
+        """cloud_mask = np.array(Image.open(path.join(dirName,"fond.png")))
+        stopwords = set(STOPWORDS)
+        for mot in ListeMotCle:
+            stopwords.add(mot)
+        wordcloud = WordCloud(background_color="white", max_words=2000, mask=cloud_mask,
+        stopwords=stopwords)
+
+
         # génération du nuage de mots
         wordcloud = WordCloud().generate(text)
         # lower max_font_size
-        wordcloud = WordCloud(max_font_size=40).generate(text)"""
+        wordcloud = WordCloud(max_font_size=40).generate(text)
+
         plt.figure()
         plt.imshow(wordcloud, interpolation="bilinear")
         plt.axis("off")
-        plt.show()
+        plt.show()"""
         MAJAffFic()
 
 ############################################################################
