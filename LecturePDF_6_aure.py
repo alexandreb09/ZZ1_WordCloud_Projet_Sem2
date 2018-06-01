@@ -21,7 +21,7 @@ from xlwt import Workbook
 from PIL import Image
 import matplotlib.pyplot as plt
 
-#Ceci est une update
+
 global listeFichier,langue,methode,numPageDeb,numPageFin,nomFichier,export
 global label_deb,entry_deb,label_fin,entry_fin,label_PpP,radiobutton_PpP
 global frame,fenetre,fond0
@@ -146,15 +146,12 @@ def methodePageParPage (l1):
     for fichier in listeFichier:
         print("Fichier étudié : ", fichier)
         nbPage = PdfFileReader(fichier).getNumPages()
-        i=0;deb=-1
-        while i<nbPage and deb==-1:                                             # tq l'on a pas trouvé les mots clés
-            text = pdf2Txt(fichier,i,i+1,nbPage,2).replace('  ',' ')
-            deb = RecherDebMotCle(text)
-            i+=1
-        if deb != 1 and text[deb+l1+2:] != "":
-            chaine = LongueurChaine(text[deb+l1+2:])
-            chaine = chaine.replace('\n',' ').replace(', ',',')
-            ListeMotCle = ListeMotCle + chaine.split(',')
+        deb=-1
+
+        text = pdf2Txt(fichier,0,nbPage,nbPage,1)
+
+        text = text.replace('\n',' ').replace(',',' ').replace('.',' ')
+        ListeMotCle = ListeMotCle + text.split(' ')
     return ListeMotCle
 
 def AddFichierCVS(listeMot):
@@ -185,10 +182,9 @@ def main():
         l1 = 9
         if langue.get() == 'anglais': l1 = 7
         print(listeFichier)
-        if methode.get() == 'Intervalle':
-            ListeMotCle = methodeIntervalle(l1)
-        else :                                                                  # Méthode intervalle
-            ListeMotCle = methodePageParPage(l1)
+        # Méthode Page par page
+        ListeMotCle = methodePageParPage(l1)
+
         SuppTemp()                                                              # Suppression fichier temporaire
         ListeMotCle = tirets(ListeMotCle)
         ListeMotCleAffichage = remake(ListeMotCle)
@@ -226,10 +222,13 @@ def main():
             stopwords.add(mot)
         wordcloud = WordCloud(background_color="white", max_words=2000, mask=cloud_mask,
         stopwords=stopwords)
+
+
         # génération du nuage de mots
         wordcloud = WordCloud().generate(text)
         # lower max_font_size
         wordcloud = WordCloud(max_font_size=40).generate(text)
+
         plt.figure()
         plt.imshow(wordcloud, interpolation="bilinear")
         plt.axis("off")
