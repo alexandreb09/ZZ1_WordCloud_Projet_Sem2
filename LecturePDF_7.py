@@ -16,8 +16,9 @@ from tkinter import (Button, Canvas, Checkbutton, Entry, Frame, IntVar, Label,
                      Listbox, Radiobutton, Scrollbar, StringVar, Tk)
 from tkinter.filedialog import askdirectory, askopenfilename
 
-import matplotlib.pyplot as plt
-import numpy as np
+
+from matplotlib.pyplot import imshow, axis,show
+from numpy import array
 from PIL import Image
 from xlwt import Workbook
 
@@ -25,7 +26,9 @@ from PyPDF2 import PdfFileMerger, PdfFileReader
 from textract import process
 from wordcloud import STOPWORDS, ImageColorGenerator, WordCloud
 
-global listeFichier,langue,methode,numPageDeb,numPageFin,nomFichier,dir_sauvegarde,dir_sauvegarde_display
+
+
+global listeFichier,lionangue,methode,numPageDeb,numPageFin,nomFichier,dir_sauvegarde,dir_sauvegarde_display
 global label_deb,entry_deb,label_fin,entry_fin,label_PpP,radiobutton_PpP
 global frame,fenetre,fond0
 
@@ -38,7 +41,7 @@ Coul_Supp = '#eb984e'
 Coul_fond_option2 = '#eb984e'
 
 listeFichier = []
-d = path.dirname(__file__)
+# d = path.dirname(__file__)
 
 
 
@@ -209,17 +212,17 @@ def main():
         stopwords.add("said")
 
         if path.exists(getcwd()+'/fond_wordcloud.png'):                                     # Si une imag de fond existe
-            alice_coloring = np.array(Image.open(path.join(d, "fond_wordcloud.png")))       # Lecture de l'image
+            alice_coloring = array(Image.open(path.join(d, "fond_wordcloud.png")))       # Lecture de l'image
             wc = WordCloud(background_color="white", max_words=2000, mask=alice_coloring,
                    stopwords=stopwords, max_font_size=400, random_state=42).generate(text)  # Création du nuage de mots à partir de l'image
             image_colors = ImageColorGenerator(alice_coloring)                              # create coloring from image
-            plt.imshow(wc.recolor(color_func=image_colors), interpolation="bilinear")       # Affichage
+            imshow(wc.recolor(color_func=image_colors), interpolation="bilinear")       # Affichage
         else :
             wc = WordCloud(background_color="white", max_words=2000,stopwords=stopwords,
                             max_font_size=400, random_state=42).generate(text)              # Génération du nuage de mot de manière automatique
-            plt.imshow(wc, interpolation="bilinear")                                        # Affichage
-        plt.axis("off")                                                                     # Desactivation axes
-        plt.show()                                                                          # Affichage fenetre
+            imshow(wc, interpolation="bilinear")                                        # Affichage
+        axis("off")                                                                     # Desactivation axes
+        show()                                                                          # Affichage fenetre
 
         MAJAffFic()
 
